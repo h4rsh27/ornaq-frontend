@@ -12,6 +12,7 @@ const resolveSocketUrl = () => {
 
   const apiUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_VITE_API_URL;
   if (apiUrl) {
+    // Strip trailing "/api" or "/api/" then any trailing slashes
     return apiUrl.replace(/\/api\/?$/, "").replace(/\/+$/, "");
   }
 

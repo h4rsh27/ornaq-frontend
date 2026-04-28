@@ -6,6 +6,23 @@ import { useAuth } from "../context/AuthContext";
 import AuthLayout from "../components/AuthLayout";
 import { Mail, Lock, Phone, ArrowRight } from "lucide-react";
 
+// Lightweight JWT payload decoder for Google credential (no external lib needed)
+const decodeJwtPayload = (token) => {
+  try {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    return JSON.parse(jsonPayload);
+  } catch {
+    return null;
+  }
+};
+
 export default function LoginPage() {
   const navigate = useNavigate();
   const { login, requestOtp, verifyOtp, googleLogin } = useAuth();
@@ -217,10 +234,17 @@ export default function LoginPage() {
             setError("");
             setLoading(true);
             try {
+              const payload = decodeJwtPayload(credentialResponse.credential);
+              if (!payload?.email || !payload?.name) {
+                setError("Google login failed: unable to read profile.");
+                setLoading(false);
+                return;
+              }
               await googleLogin({
-                email: "google-user@example.com",
-                name: "Google User",
-                googleId: credentialResponse.credential
+                email: payload.email,
+                name: payload.name,
+                googleId: payload.sub,
+                avatar: payload.picture || ""
               });
               navigate("/");
             } catch (err) {
