@@ -1,9 +1,19 @@
 import { useEffect } from "react";
-import { socket } from "../services/socket";
+import { connectSocket, disconnectSocket, socket } from "../services/socket";
 
 export const useRealtime = ({ onStockUpdate, onOrderUpdate, onPaymentUpdate, userId }) => {
   useEffect(() => {
-    if (userId) socket.emit("join:user", userId);
+    connectSocket();
+
+    const joinUserRoom = () => {
+      if (userId) {
+        socket.emit("join:user", userId);
+      }
+    };
+
+    joinUserRoom();
+    socket.on("connect", joinUserRoom);
+
     if (onStockUpdate) socket.on("stock:updated", onStockUpdate);
     if (onOrderUpdate) {
       socket.on("order:status-updated", onOrderUpdate);
@@ -14,6 +24,7 @@ export const useRealtime = ({ onStockUpdate, onOrderUpdate, onPaymentUpdate, use
     if (onPaymentUpdate) socket.on("paymentStatusUpdated", onPaymentUpdate);
 
     return () => {
+      socket.off("connect", joinUserRoom);
       if (onStockUpdate) socket.off("stock:updated", onStockUpdate);
       if (onOrderUpdate) {
         socket.off("order:status-updated", onOrderUpdate);
@@ -22,6 +33,7 @@ export const useRealtime = ({ onStockUpdate, onOrderUpdate, onPaymentUpdate, use
         socket.off("order:created", onOrderUpdate);
       }
       if (onPaymentUpdate) socket.off("paymentStatusUpdated", onPaymentUpdate);
+      disconnectSocket();
     };
   }, [onStockUpdate, onOrderUpdate, onPaymentUpdate, userId]);
 };

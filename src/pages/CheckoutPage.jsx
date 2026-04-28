@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../services/api";
+import api, { getApiErrorMessage } from "../services/api";
 import { useStore } from "../context/StoreContext";
 import { useNotification } from "../context/NotificationContext";
 import PaymentModal from "../components/PaymentModal";
@@ -29,9 +29,18 @@ export default function CheckoutPage() {
   const subtotal = useMemo(() => cartSummary.subtotal, [cartSummary]);
   const shippingFee = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
   const totalAmount = subtotal + shippingFee;
+  const hasMissingAddressFields = !address.name || !address.phone || !address.line1 || !address.city || !address.state || !address.pincode;
 
   const placeOrder = async () => {
-    if (!cart.length) return;
+    if (!cart.length) {
+      setError("Your cart is empty.");
+      return;
+    }
+    if (hasMissingAddressFields) {
+      setError("Please complete all required delivery details before placing the order.");
+      return;
+    }
+
     setProcessing(true);
     setError("");
     try {
@@ -55,7 +64,7 @@ export default function CheckoutPage() {
       }
       navigate("/order-result", { state: res.data });
     } catch (errorResponse) {
-      const message = errorResponse.response?.data?.message || "Order failed";
+      const message = getApiErrorMessage(errorResponse, "Order failed");
       setError(message);
       navigate("/order-result", {
         state: {
@@ -73,22 +82,27 @@ export default function CheckoutPage() {
     }
   };
 
+  const submitOrder = (event) => {
+    event.preventDefault();
+    placeOrder();
+  };
+
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
       <PaymentModal open={processing} message="Processing payment, please wait..." />
       <h1 className="text-3xl font-semibold text-stone-900">Checkout</h1>
-      <div className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+      <form className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]" onSubmit={submitOrder}>
         <div className="space-y-6">
           <div className="rounded-[2rem] border border-stone-200 bg-white p-6">
             <h2 className="font-semibold text-stone-900">Delivery address</h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <input className="rounded-2xl border border-stone-200 p-3.5" placeholder="Full name" value={address.name} onChange={(event) => setAddress((current) => ({ ...current, name: event.target.value }))} />
-              <input className="rounded-2xl border border-stone-200 p-3.5" placeholder="Phone" value={address.phone} onChange={(event) => setAddress((current) => ({ ...current, phone: event.target.value }))} />
-              <input className="rounded-2xl border border-stone-200 p-3.5 sm:col-span-2" placeholder="Address line 1" value={address.line1} onChange={(event) => setAddress((current) => ({ ...current, line1: event.target.value }))} />
+              <input required className="rounded-2xl border border-stone-200 p-3.5" placeholder="Full name" value={address.name} onChange={(event) => setAddress((current) => ({ ...current, name: event.target.value }))} />
+              <input required className="rounded-2xl border border-stone-200 p-3.5" placeholder="Phone" value={address.phone} onChange={(event) => setAddress((current) => ({ ...current, phone: event.target.value }))} />
+              <input required className="rounded-2xl border border-stone-200 p-3.5 sm:col-span-2" placeholder="Address line 1" value={address.line1} onChange={(event) => setAddress((current) => ({ ...current, line1: event.target.value }))} />
               <input className="rounded-2xl border border-stone-200 p-3.5 sm:col-span-2" placeholder="Address line 2 (optional)" value={address.line2} onChange={(event) => setAddress((current) => ({ ...current, line2: event.target.value }))} />
-              <input className="rounded-2xl border border-stone-200 p-3.5" placeholder="City" value={address.city} onChange={(event) => setAddress((current) => ({ ...current, city: event.target.value }))} />
-              <input className="rounded-2xl border border-stone-200 p-3.5" placeholder="State" value={address.state} onChange={(event) => setAddress((current) => ({ ...current, state: event.target.value }))} />
-              <input className="rounded-2xl border border-stone-200 p-3.5" placeholder="Pincode" value={address.pincode} onChange={(event) => setAddress((current) => ({ ...current, pincode: event.target.value }))} />
+              <input required className="rounded-2xl border border-stone-200 p-3.5" placeholder="City" value={address.city} onChange={(event) => setAddress((current) => ({ ...current, city: event.target.value }))} />
+              <input required className="rounded-2xl border border-stone-200 p-3.5" placeholder="State" value={address.state} onChange={(event) => setAddress((current) => ({ ...current, state: event.target.value }))} />
+              <input required className="rounded-2xl border border-stone-200 p-3.5" placeholder="Pincode" value={address.pincode} onChange={(event) => setAddress((current) => ({ ...current, pincode: event.target.value }))} />
             </div>
           </div>
 
@@ -131,15 +145,14 @@ export default function CheckoutPage() {
           </p>
           {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
           <button
-            type="button"
-            onClick={placeOrder}
-            disabled={!cart.length || processing || !address.name || !address.phone || !address.line1 || !address.city || !address.state || !address.pincode}
+            type="submit"
+            disabled={!cart.length || processing}
             className="mt-6 w-full rounded-2xl bg-brand-700 px-5 py-3 text-white disabled:opacity-50"
           >
             Place Order
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
