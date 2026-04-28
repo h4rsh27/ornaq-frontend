@@ -8,7 +8,8 @@ const resolveApiBaseUrl = () => {
     import.meta.env.VITE_VITE_API_URL;
 
   if (configuredUrl) {
-    return trimTrailingSlash(configuredUrl);
+    const url = trimTrailingSlash(configuredUrl);
+    return url.endsWith("/api") ? url : `${url}/api`;
   }
 
   if (import.meta.env.DEV) {
