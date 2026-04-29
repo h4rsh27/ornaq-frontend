@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import api from "../services/api";
+import AuthLayout from "../components/AuthLayout";
 
 export default function ResetPasswordPage() {
   const [searchParams] = useSearchParams();
@@ -27,25 +28,39 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="mx-auto max-w-md px-4 py-10">
-      <h1 className="text-3xl font-semibold text-stone-900">Reset password</h1>
-      <p className="mt-2 text-stone-500">Set a new password for your account.</p>
-      <form onSubmit={submit} className="mt-6 space-y-4">
-        <input
-          required
-          minLength={6}
-          className="w-full rounded-2xl border border-stone-200 p-3.5"
-          type="password"
-          placeholder="New password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-        />
-        {message && <p className="text-sm text-stone-700">{message}</p>}
-        <button disabled={loading} className="w-full rounded-2xl bg-brand-700 p-3.5 text-white disabled:opacity-50">
-          {loading ? "Resetting..." : "Reset password"}
+    <AuthLayout 
+      eyebrow="Identity" 
+      title="Credential Reset" 
+      subtitle="Finalize your account recovery by establishing a new high-security access key."
+    >
+      <form onSubmit={submit} className="space-y-8">
+        <div className="space-y-2">
+          <label className="text-[10px] font-black uppercase tracking-[0.3em] text-stone-400 ml-4">New Secret Key</label>
+          <input
+            required
+            minLength={6}
+            className="w-full rounded-2xl bg-stone-50 px-6 py-4 text-sm font-bold border-transparent focus:bg-white focus:border-brand-300 focus:ring-0 transition-all"
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+        </div>
+        
+        {message && (
+          <div className="rounded-2xl bg-stone-50 p-4 border border-stone-100 animate-fade-in">
+            <p className="text-xs font-bold text-stone-600 uppercase tracking-widest">{message}</p>
+          </div>
+        )}
+
+        <button disabled={loading} className="btn-primary w-full py-5">
+          {loading ? "Reconfiguring..." : "Establish New Key"}
         </button>
+
+        <p className="text-center text-[10px] font-black uppercase tracking-widest text-stone-400">
+          Aborting recovery? <Link to="/login" className="text-brand-700 hover:text-brand-800 underline underline-offset-4">Return to Portal</Link>
+        </p>
       </form>
-      <p className="mt-4 text-sm text-stone-500">Back to <Link to="/login" className="text-brand-700">login</Link></p>
-    </div>
+    </AuthLayout>
   );
 }

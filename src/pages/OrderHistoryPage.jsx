@@ -26,22 +26,27 @@ export default function OrderHistoryPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#fffdf9_0%,#f7f0e7_100%)]">
-      <div className="mx-auto max-w-5xl px-4 py-10">
-        <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-700">Your orders</p>
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight text-stone-900">Order history</h1>
-        <p className="mt-2 text-stone-600">Track placed orders, open full details, and request cancellation or return where available.</p>
+    <div className="min-h-screen bg-[#fffdf9] pb-20">
+      <div className="mx-auto max-w-7xl px-6 py-10 sm:px-8 sm:py-16">
+        <header className="mb-10">
+          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-700">Orders</p>
+          <h1 className="mt-3 text-3xl font-black text-stone-900 sm:text-5xl">Your Timeline</h1>
+          <p className="mt-4 max-w-2xl text-sm font-medium text-stone-500 sm:text-base">
+            Track your luxury acquisitions and revisit the details of your previous ORNAQ orders.
+          </p>
+        </header>
 
-        <div className="mt-8 space-y-4">
+        <div className="space-y-6">
           {loading &&
-            Array.from({ length: 3 }).map((_, index) => <SkeletonBlock key={index} className="h-36 w-full" />)}
+            Array.from({ length: 3 }).map((_, index) => <SkeletonBlock key={index} className="h-40 w-full rounded-[2.5rem]" />)}
 
           {!loading && orders.length === 0 && (
-            <div className="rounded-[2rem] border border-dashed border-stone-300 bg-white px-6 py-16 text-center shadow-sm shadow-stone-200/40">
-              <h2 className="text-2xl font-semibold text-stone-900">No orders yet</h2>
-              <p className="mt-2 text-stone-500">Your placed orders will appear here once checkout is complete.</p>
-              <Link to="/shop" className="mt-6 inline-flex rounded-full bg-brand-700 px-5 py-3 text-sm font-semibold text-white">
-                Start shopping
+            <div className="rounded-[3rem] border border-dashed border-stone-200 bg-white px-8 py-20 text-center shadow-xl shadow-stone-100">
+              <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-stone-50 text-2xl">📦</div>
+              <h2 className="text-2xl font-black text-stone-900">No orders discovered</h2>
+              <p className="mt-3 text-stone-500">You haven't placed any orders yet. Explore our curated collections.</p>
+              <Link to="/shop" className="btn-primary mt-8 inline-flex px-10">
+                Explore Shop
               </Link>
             </div>
           )}
@@ -51,25 +56,37 @@ export default function OrderHistoryPage() {
               <Link
                 key={order._id}
                 to={`/profile/orders/${order._id}`}
-                className="block rounded-[2rem] border border-stone-200 bg-white p-5 shadow-sm shadow-stone-200/40 transition hover:-translate-y-0.5 hover:shadow-md"
+                className="group block rounded-[2.5rem] border border-stone-100 bg-white p-8 shadow-xl shadow-stone-100 transition-all hover:-translate-y-1 hover:shadow-stone-200/50"
               >
-                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.24em] text-stone-400">Order ID</p>
-                    <p className="mt-2 font-semibold text-stone-900">#{order._id.slice(-8).toUpperCase()}</p>
-                    <p className="mt-1 text-sm text-stone-500">{new Date(order.createdAt).toLocaleString()}</p>
+                <div className="flex flex-col gap-8 md:flex-row md:items-center">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-brand-700">Order ID</span>
+                      <span className="h-px w-4 bg-stone-100" />
+                      <span className="text-xs font-bold text-stone-400">{new Date(order.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    <p className="mt-2 text-lg font-black text-stone-900">#{order._id.slice(-8).toUpperCase()}</p>
+                    <div className="mt-4 flex items-center gap-6">
+                      <div className="space-y-1">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-stone-300">Items</p>
+                        <p className="text-sm font-bold text-stone-700">{order.items?.length || 0} Units</p>
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-stone-300">Total Value</p>
+                        <p className="text-sm font-bold text-brand-700">{formatCurrency(order.totalAmount)}</p>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.24em] text-stone-400">Payment</p>
-                    <p className="mt-2 text-sm font-semibold text-stone-900">{order.paymentMethod}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.24em] text-stone-400">Total</p>
-                    <p className="mt-2 text-sm font-semibold text-stone-900">{formatCurrency(order.totalAmount)}</p>
-                  </div>
-                  <div className="md:text-right">
-                    <span className={`inline-flex rounded-full px-3 py-1 text-xs font-bold ${statusClasses[order.orderStatus] || "bg-stone-100 text-stone-700"}`}>
+
+                  <div className="flex flex-wrap items-center justify-between gap-4 md:flex-col md:items-end">
+                    <span className={`inline-flex rounded-full px-4 py-1.5 text-[10px] font-black uppercase tracking-widest ${statusClasses[order.orderStatus] || "bg-stone-100 text-stone-600"}`}>
                       {order.orderStatus.replaceAll("_", " ")}
+                    </span>
+                    <span className="flex items-center gap-2 text-xs font-black text-brand-700 group-hover:gap-3 transition-all">
+                      View Insights
+                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
                     </span>
                   </div>
                 </div>

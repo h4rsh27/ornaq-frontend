@@ -76,78 +76,135 @@ export default function AddProductPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#fffdf9_0%,#f7f0e7_100%)]">
-      <div className="mx-auto max-w-5xl px-4 py-12">
-        <div className="flex flex-col gap-4 border-b border-stone-200 pb-6 md:flex-row md:items-end md:justify-between">
+    <div className="min-h-screen bg-[#fffdf9] pb-20">
+      <div className="mx-auto max-w-5xl px-6 py-10 sm:px-8 sm:py-16">
+        <div className="flex flex-col gap-6 border-b border-stone-100 pb-12 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-700">Catalog publishing</p>
-            <h1 className="mt-3 text-4xl font-semibold tracking-tight text-stone-900">Add a new saree product</h1>
-            <p className="mt-2 text-stone-600">Create a catalog listing with discounts, color variants, delivery settings, and new-arrival highlighting.</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-700">Publishing</p>
+            <h1 className="mt-3 text-3xl font-black tracking-tight text-stone-900 sm:text-5xl">New Creation</h1>
+            <p className="mt-4 max-w-xl text-sm font-medium text-stone-500 sm:text-base">
+              Introduce a new artifact to your luxury catalog. Define its essence, set its valuation, and curate its digital presence.
+            </p>
           </div>
-          <button type="button" onClick={() => navigate(-1)} className="text-sm font-bold text-stone-500 hover:text-stone-900">
-            Cancel and go back
+          <button type="button" onClick={() => navigate(-1)} className="text-[10px] font-black uppercase tracking-widest text-stone-400 hover:text-stone-900 transition-colors">
+            Discard and exit
           </button>
         </div>
 
-        {error && <div className="mt-6 rounded-[1.5rem] bg-red-50 px-5 py-4 text-sm text-red-700">{error}</div>}
+        {error && (
+          <div className="mt-8 rounded-[2rem] bg-red-50 p-6 text-sm font-bold text-red-700 border border-red-100 animate-fade-in">
+            <span className="mr-2 italic">Signal Interrupt:</span> {error}
+          </div>
+        )}
 
-        <form onSubmit={submit} className="mt-10 grid gap-8 md:grid-cols-2">
-          <div className="space-y-6">
-            <div className="space-y-4 rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm shadow-stone-200/40">
-              <h2 className="text-lg font-semibold text-stone-900">General information</h2>
-              <input required className="w-full rounded-2xl border border-stone-200 p-3.5" placeholder="Product Name" value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} />
-              <textarea required rows={5} className="w-full rounded-2xl border border-stone-200 p-3.5" placeholder="Describe drape, border, weave feel, and occasion." value={form.description} onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))} />
-            </div>
-
-            <div className="space-y-4 rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm shadow-stone-200/40">
-              <h2 className="text-lg font-semibold text-stone-900">Attributes</h2>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <select className="rounded-2xl border border-stone-200 p-3.5" value={form.category} onChange={(event) => setForm((current) => ({ ...current, category: event.target.value }))}>
-                  {categories.map((category) => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
-                  ))}
-                </select>
-                <input required className="rounded-2xl border border-stone-200 p-3.5" placeholder="Fabric" value={form.fabric} onChange={(event) => setForm((current) => ({ ...current, fabric: event.target.value }))} />
-                <input required className="rounded-2xl border border-stone-200 p-3.5" placeholder="Primary color" value={form.color} onChange={(event) => setForm((current) => ({ ...current, color: event.target.value }))} />
-                <input className="rounded-2xl border border-stone-200 p-3.5" placeholder="All colors (comma separated)" value={form.colorsInput} onChange={(event) => setForm((current) => ({ ...current, colorsInput: event.target.value }))} />
+        <form onSubmit={submit} className="mt-12 grid gap-12 lg:grid-cols-2">
+          <div className="space-y-10">
+            <section className="space-y-8 rounded-[3rem] border border-stone-50 bg-white p-8 shadow-2xl shadow-stone-100 sm:p-10">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-700 mb-6">Core Essence</p>
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-stone-400 ml-4">Artifact Name</label>
+                    <input required className="w-full rounded-2xl bg-stone-50 px-6 py-4 text-sm font-bold border-transparent focus:bg-white focus:border-brand-300 focus:ring-0 transition-all" placeholder="Enter product name..." value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-stone-400 ml-4">Narrative Description</label>
+                    <textarea required rows={6} className="w-full rounded-2xl bg-stone-50 px-6 py-4 text-sm font-medium leading-relaxed border-transparent focus:bg-white focus:border-brand-300 focus:ring-0 transition-all" placeholder="Describe the drape, weave history, and occasion..." value={form.description} onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))} />
+                  </div>
+                </div>
               </div>
-            </div>
+            </section>
+
+            <section className="space-y-8 rounded-[3rem] border border-stone-50 bg-white p-8 shadow-2xl shadow-stone-100 sm:p-10">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-700 mb-6">Material Attributes</p>
+                <div className="grid gap-6 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-stone-400 ml-4">Classification</label>
+                    <select className="w-full rounded-2xl bg-stone-50 px-6 py-4 text-sm font-black uppercase tracking-widest text-stone-600 border-transparent focus:bg-white focus:border-brand-300 focus:ring-0 transition-all appearance-none" value={form.category} onChange={(event) => setForm((current) => ({ ...current, category: event.target.value }))}>
+                      {categories.map((category) => (
+                        <option key={category} value={category}>{category}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-stone-400 ml-4">Fabric</label>
+                    <input required className="w-full rounded-2xl bg-stone-50 px-6 py-4 text-sm font-bold border-transparent focus:bg-white focus:border-brand-300 focus:ring-0 transition-all" placeholder="Silk, Cotton, etc." value={form.fabric} onChange={(event) => setForm((current) => ({ ...current, fabric: event.target.value }))} />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-stone-400 ml-4">Primary Color</label>
+                    <input required className="w-full rounded-2xl bg-stone-50 px-6 py-4 text-sm font-bold border-transparent focus:bg-white focus:border-brand-300 focus:ring-0 transition-all" placeholder="Ruby Red" value={form.color} onChange={(event) => setForm((current) => ({ ...current, color: event.target.value }))} />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-stone-400 ml-4">Variant Palette</label>
+                    <input className="w-full rounded-2xl bg-stone-50 px-6 py-4 text-sm font-bold border-transparent focus:bg-white focus:border-brand-300 focus:ring-0 transition-all" placeholder="Red, Gold, Ivory" value={form.colorsInput} onChange={(event) => setForm((current) => ({ ...current, colorsInput: event.target.value }))} />
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
 
-          <div className="space-y-6">
-            <div className="space-y-4 rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm shadow-stone-200/40">
-              <h2 className="text-lg font-semibold text-stone-900">Pricing and launch</h2>
-              <div className="grid grid-cols-2 gap-4">
-                <input required type="number" className="rounded-2xl border border-stone-200 p-3.5" placeholder="Price" value={form.price} onChange={(event) => setForm((current) => ({ ...current, price: event.target.value }))} />
-                <input type="number" className="rounded-2xl border border-stone-200 p-3.5" placeholder="Discount %" value={form.discountPercent} onChange={(event) => setForm((current) => ({ ...current, discountPercent: event.target.value }))} />
-                <input required type="number" className="rounded-2xl border border-stone-200 p-3.5" placeholder="Stock" value={form.stock} onChange={(event) => setForm((current) => ({ ...current, stock: event.target.value }))} />
-                <label className="flex items-center gap-2 rounded-2xl border border-stone-200 px-4">
-                  <input type="checkbox" checked={form.isNewArrival} onChange={(event) => setForm((current) => ({ ...current, isNewArrival: event.target.checked }))} />
-                  <span className="text-sm font-medium">New arrival</span>
-                </label>
-                <label className="flex items-center gap-2 rounded-2xl border border-stone-200 px-4">
-                  <input type="checkbox" checked={form.featured} onChange={(event) => setForm((current) => ({ ...current, featured: event.target.checked }))} />
-                  <span className="text-sm font-medium">Featured</span>
-                </label>
-              </div>
-            </div>
-
-            <div className="space-y-4 rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm shadow-stone-200/40">
-              <h2 className="text-lg font-semibold text-stone-900">Product media</h2>
-              <input type="file" multiple accept="image/*" onChange={handleFileChange} className="block w-full text-sm text-stone-500" />
-              {previews.length > 0 && (
-                <div className="grid grid-cols-3 gap-3">
-                  {previews.map((src, index) => (
-                    <img key={index} src={src} alt="Preview" className="h-24 w-full rounded-2xl object-cover" />
-                  ))}
+          <div className="space-y-10">
+            <section className="space-y-8 rounded-[3rem] border border-stone-50 bg-white p-8 shadow-2xl shadow-stone-100 sm:p-10">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-700 mb-6">Valuation & Visibility</p>
+                <div className="grid gap-6 grid-cols-2">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-stone-400 ml-4">Price</label>
+                    <input required type="number" className="w-full rounded-2xl bg-stone-50 px-6 py-4 text-sm font-black border-transparent focus:bg-white focus:border-brand-300 focus:ring-0 transition-all" placeholder="0.00" value={form.price} onChange={(event) => setForm((current) => ({ ...current, price: event.target.value }))} />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-stone-400 ml-4">Discount %</label>
+                    <input type="number" className="w-full rounded-2xl bg-stone-50 px-6 py-4 text-sm font-black border-transparent focus:bg-white focus:border-brand-300 focus:ring-0 transition-all" placeholder="0" value={form.discountPercent} onChange={(event) => setForm((current) => ({ ...current, discountPercent: event.target.value }))} />
+                  </div>
+                  <div className="space-y-2 col-span-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-stone-400 ml-4">Live Inventory Stock</label>
+                    <input required type="number" className="w-full rounded-2xl bg-stone-50 px-6 py-4 text-sm font-black border-transparent focus:bg-white focus:border-brand-300 focus:ring-0 transition-all" placeholder="0" value={form.stock} onChange={(event) => setForm((current) => ({ ...current, stock: event.target.value }))} />
+                  </div>
+                  <label className="flex items-center gap-3 rounded-2xl bg-stone-50 px-6 py-4 cursor-pointer hover:bg-stone-100 transition-colors">
+                    <input type="checkbox" className="h-4 w-4 rounded border-stone-300 text-brand-700 focus:ring-brand-500" checked={form.isNewArrival} onChange={(event) => setForm((current) => ({ ...current, isNewArrival: event.target.checked }))} />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-stone-600">New Arrival</span>
+                  </label>
+                  <label className="flex items-center gap-3 rounded-2xl bg-stone-50 px-6 py-4 cursor-pointer hover:bg-stone-100 transition-colors">
+                    <input type="checkbox" className="h-4 w-4 rounded border-stone-300 text-brand-700 focus:ring-brand-500" checked={form.featured} onChange={(event) => setForm((current) => ({ ...current, featured: event.target.checked }))} />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-stone-600">Featured</span>
+                  </label>
                 </div>
-              )}
-            </div>
+              </div>
+            </section>
 
-            <button disabled={submitting} className="w-full rounded-[1.5rem] bg-brand-700 py-5 text-xl font-black text-white shadow-xl shadow-brand-200/60 transition-all hover:bg-brand-800 disabled:opacity-50">
-              {submitting ? "Publishing saree..." : "Publish product"}
+            <section className="space-y-8 rounded-[3rem] border border-stone-50 bg-white p-8 shadow-2xl shadow-stone-100 sm:p-10">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-700 mb-6">Visual Artifacts</p>
+                <div className="space-y-6">
+                  <div className="relative group">
+                    <input type="file" multiple accept="image/*" onChange={handleFileChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                    <div className="flex flex-col items-center justify-center rounded-[2.5rem] border-2 border-dashed border-stone-100 bg-stone-50 py-10 transition-all group-hover:bg-stone-100 group-hover:border-stone-200">
+                      <div className="mb-3 text-2xl">📸</div>
+                      <p className="text-[10px] font-black uppercase tracking-widest text-stone-400">Capture visual assets</p>
+                      <p className="mt-1 text-[8px] font-bold text-stone-300">Multiple files supported</p>
+                    </div>
+                  </div>
+                  {previews.length > 0 && (
+                    <div className="grid grid-cols-4 gap-3">
+                      {previews.map((src, index) => (
+                        <div key={index} className="aspect-[3/4] overflow-hidden rounded-xl bg-stone-50">
+                          <img src={src} alt="Preview" className="h-full w-full object-cover" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </section>
+
+            <button disabled={submitting} className="btn-primary w-full py-6 text-xs lg:text-sm">
+              {submitting ? (
+                <div className="flex items-center gap-3">
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white" />
+                  <span>Committing Artifact...</span>
+                </div>
+              ) : "Publish to Catalog"}
             </button>
           </div>
         </form>

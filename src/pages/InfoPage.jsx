@@ -69,13 +69,16 @@ export default function InfoPage({ slug }) {
   const page = pageContent[slug] || pageContent.disclaimer;
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#fffdf9_0%,#f5efe6_100%)]">
-      <div className="mx-auto max-w-4xl px-4 py-12">
-        <p className="text-xs font-bold uppercase tracking-[0.24em] text-brand-700">{page.eyebrow}</p>
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight text-stone-900">{page.title}</h1>
-        <div className="mt-8 space-y-4 rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm shadow-stone-200/40">
-          {page.paragraphs.map((paragraph) => (
-            <p key={paragraph} className="text-base leading-8 text-stone-600">
+    <div className="min-h-screen bg-[#fffdf9] pb-20">
+      <div className="mx-auto max-w-4xl px-6 py-10 sm:px-8 sm:py-16">
+        <header className="mb-12">
+          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-700">{page.eyebrow}</p>
+          <h1 className="mt-3 text-3xl font-black text-stone-900 sm:text-5xl">{page.title}</h1>
+        </header>
+
+        <div className="space-y-8 rounded-[3rem] border border-stone-100 bg-white p-8 shadow-2xl shadow-stone-200/50 sm:p-12">
+          {page.paragraphs.map((paragraph, idx) => (
+            <p key={idx} className="text-sm font-medium leading-[1.8] text-stone-500 sm:text-base">
               {paragraph}
             </p>
           ))}

@@ -83,112 +83,151 @@ export default function ProductPage() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8">
-      <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr]">
-        <div>
-          <div className="group relative overflow-hidden rounded-[2rem] border border-stone-200 bg-white p-3 shadow-sm shadow-stone-200/40">
+    <div className="mx-auto max-w-7xl px-4 py-6 sm:py-10">
+      <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
+        {/* Left Column: Gallery */}
+        <div className="space-y-4">
+          <div className="relative aspect-[3/4] overflow-hidden rounded-3xl border border-stone-100 bg-white shadow-sm sm:aspect-[4/5] lg:aspect-square">
             <img
               src={activeImage || getProductImage(product)}
               alt={product.name}
-              className="h-[32rem] w-full rounded-[1.5rem] object-cover transition-transform duration-700 group-hover:scale-110"
+              className="h-full w-full object-cover transition-transform duration-700 hover:scale-110"
             />
-            <div className="absolute inset-0 rounded-[1.5rem] bg-black/0 transition-colors group-hover:bg-black/5" />
+            {product.isNewArrival && (
+              <span className="absolute left-4 top-4 rounded-full bg-amber-400 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white shadow-lg">
+                New Arrival
+              </span>
+            )}
           </div>
+          
           {galleryImages.length > 1 && (
-            <div className="mt-4 flex flex-wrap gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide snap-x">
               {galleryImages.map((image) => (
                 <button
                   key={image.url}
                   type="button"
                   onClick={() => setActiveImage(image.url)}
-                  className={`relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-[1.25rem] border-2 transition-all ${
-                    activeImage === image.url ? "border-brand-500 scale-95 shadow-inner" : "border-stone-100 hover:border-stone-300"
+                  className={`relative h-20 w-20 flex-shrink-0 snap-start overflow-hidden rounded-2xl border-2 transition-all ${
+                    activeImage === image.url ? "border-brand-500 scale-95" : "border-transparent opacity-60 hover:opacity-100"
                   }`}
                 >
                   <img src={image.url} alt={product.name} className="h-full w-full object-cover" />
-                  {activeImage === image.url && <div className="absolute inset-0 bg-brand-500/10" />}
                 </button>
               ))}
             </div>
           )}
         </div>
 
-        <div>
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              {product.isNewArrival && <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-amber-700">New Arrival</span>}
-              <h1 className="mt-3 text-3xl font-semibold text-stone-900">{product.name}</h1>
-              <p className="mt-2 text-sm text-stone-500">{product.category} • {product.fabric}</p>
-            </div>
-            <div className="rounded-full bg-brand-50 px-4 py-2 text-sm font-semibold text-brand-800">
-              {Number(product.averageRating || 0).toFixed(1)} / 5
-            </div>
-          </div>
-
-          <p className="mt-4 text-zinc-600">{product.description}</p>
-
-          <div className="mt-6 flex items-end gap-3">
-            <p className="text-3xl font-semibold text-stone-900">{formatCurrency(effectivePrice)}</p>
-            {Number(product.discountPercent || 0) > 0 && (
-              <>
-                <p className="text-lg text-stone-400 line-through">{formatCurrency(product.price)}</p>
-                <span className="rounded-full bg-red-50 px-3 py-1 text-sm font-bold text-red-700">
-                  {product.discountPercent}% OFF
-                </span>
-              </>
-            )}
-          </div>
-
-          {productColors.length > 0 && (
-            <div className="mt-8">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-stone-400">Color variants</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {productColors.map((color) => (
-                  <button
-                    key={color}
-                    type="button"
-                    onClick={() => setSelectedColor(color)}
-                    className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                      selectedColor === color ? "border-brand-400 bg-brand-50 text-brand-800" : "border-stone-200 text-stone-600"
-                    }`}
-                  >
-                    {color}
-                  </button>
-                ))}
+        {/* Right Column: Info */}
+        <div className="flex flex-col pt-2 lg:pt-0">
+          <div className="mb-6 border-b border-stone-100 pb-6">
+            <div className="flex items-start justify-between gap-4">
+              <div className="space-y-1">
+                <h1 className="text-2xl font-black tracking-tight text-stone-900 sm:text-4xl">{product.name}</h1>
+                <p className="text-sm font-bold uppercase tracking-widest text-brand-700">{product.category} • {product.fabric}</p>
+              </div>
+              <div className="flex shrink-0 items-center gap-1 rounded-full bg-stone-900 px-3 py-1.5 text-white shadow-lg shadow-stone-200">
+                <span className="text-sm font-black">{Number(product.averageRating || 0).toFixed(1)}</span>
+                <svg className="h-3.5 w-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
               </div>
             </div>
-          )}
 
-          <div className="mt-6 rounded-[1.5rem] border border-stone-200 bg-stone-50/70 p-4">
-            <div className="flex items-center justify-between gap-4">
+            <div className="mt-6 flex items-baseline gap-3">
+              <p className="text-3xl font-black text-stone-900 sm:text-4xl">{formatCurrency(effectivePrice)}</p>
+              {Number(product.discountPercent || 0) > 0 && (
+                <div className="flex items-center gap-2">
+                  <span className="text-lg text-stone-400 line-through">{formatCurrency(product.price)}</span>
+                  <span className="rounded-lg bg-red-100 px-2 py-1 text-xs font-black text-red-600">
+                    SAVE {product.discountPercent}%
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="space-y-8">
+            <p className="text-base leading-relaxed text-stone-600 sm:text-lg">{product.description}</p>
+
+            {productColors.length > 0 && (
               <div>
-                <p className={`text-sm font-semibold ${product.stock > 0 ? "text-emerald-600" : "text-red-600"}`}>
-                  Live stock: {activeVariant?.stock ?? product.stock}
-                </p>
-                <p className="mt-1 text-sm text-stone-500">
-                  Delivery in {product.deliveryEstimate?.minDays || 3}-{product.deliveryEstimate?.maxDays || 5} days
-                </p>
+                <p className="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-stone-400">Select Saree Color</p>
+                <div className="flex flex-wrap gap-3">
+                  {productColors.map((color) => (
+                    <button
+                      key={color}
+                      type="button"
+                      onClick={() => setSelectedColor(color)}
+                      className={`flex min-h-[3rem] items-center gap-3 rounded-2xl border-2 px-6 py-2 transition-all active:scale-95 ${
+                        selectedColor === color 
+                          ? "border-brand-600 bg-brand-50/50 text-brand-900 shadow-md shadow-brand-100" 
+                          : "border-stone-100 bg-stone-50 text-stone-600 hover:border-stone-200"
+                      }`}
+                    >
+                      <div className="h-4 w-4 rounded-full border border-black/10 shadow-inner" style={{ backgroundColor: color.toLowerCase() }} />
+                      <span className="text-sm font-bold">{color}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
-              <button type="button" onClick={() => addToCart(product, 1, selectedColor)} className="rounded-xl bg-brand-700 px-5 py-3 text-sm font-semibold text-white">
-                Add to cart
-              </button>
-            </div>
-          </div>
+            )}
 
-          <div className="mt-8 rounded-[1.5rem] border border-stone-200 bg-stone-50/70 p-4">
-            <p className="font-semibold text-stone-900">Check delivery availability</p>
-            <div className="mt-3 flex flex-col gap-3 sm:flex-row">
-              <input
-                value={pincode}
-                onChange={(event) => setPincode(event.target.value)}
-                placeholder="Enter pincode"
-                className="flex-1 rounded-2xl border border-stone-200 px-4 py-3"
-              />
-              <button type="button" onClick={checkPincode} className="rounded-2xl bg-stone-900 px-4 py-3 text-white">
-                {checkingPincode ? "Checking..." : "Check"}
-              </button>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="rounded-3xl border border-stone-100 bg-emerald-50/30 p-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <p className="text-sm font-black text-emerald-800 uppercase tracking-wider">In Stock</p>
+                </div>
+                <p className="text-2xl font-black text-stone-900">{activeVariant?.stock ?? product.stock} <span className="text-xs font-bold text-stone-500 uppercase tracking-widest">Units left</span></p>
+              </div>
+
+              <div className="rounded-3xl border border-stone-100 bg-stone-50/50 p-6">
+                <p className="text-sm font-black text-stone-400 uppercase tracking-wider mb-2">Shipping Estimate</p>
+                <p className="text-lg font-bold text-stone-800">{product.deliveryEstimate?.minDays || 3}-{product.deliveryEstimate?.maxDays || 5} Business Days</p>
+              </div>
             </div>
-            {serviceability && <p className={`mt-3 text-sm ${serviceability.available ? "text-emerald-700" : "text-red-600"}`}>{serviceability.message}</p>}
+
+            <div className="space-y-4 pt-4">
+              <button 
+                type="button" 
+                onClick={() => addToCart(product, 1, selectedColor)} 
+                className="btn-primary w-full shadow-2xl py-5 text-lg"
+              >
+                Add to Luxury Bag
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+              </button>
+
+              <div className="rounded-3xl bg-zinc-900 p-6 text-white shadow-2xl">
+                <p className="mb-4 text-sm font-bold tracking-tight">Check Delivery & COD Availability</p>
+                <div className="flex gap-2">
+                  <input
+                    value={pincode}
+                    onChange={(event) => setPincode(event.target.value)}
+                    placeholder="Enter delivery pincode"
+                    className="flex-1 rounded-xl bg-white/10 px-4 py-3.5 text-sm font-medium border border-white/20 outline-none focus:bg-white/20 transition-all placeholder:text-zinc-500"
+                  />
+                  <button 
+                    type="button" 
+                    onClick={checkPincode} 
+                    className="rounded-xl bg-white px-6 py-3.5 text-sm font-black text-zinc-900 transition-all hover:bg-zinc-100 active:scale-95"
+                  >
+                    {checkingPincode ? "..." : "Check"}
+                  </button>
+                </div>
+                {serviceability && (
+                  <motion.p 
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`mt-4 text-sm font-bold ${serviceability.available ? "text-emerald-400" : "text-red-400"}`}
+                  >
+                    {serviceability.message}
+                  </motion.p>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>

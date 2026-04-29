@@ -28,82 +28,94 @@ export default function RegisterPage() {
 
   return (
     <AuthLayout
-      title="Join the Club"
-      subtitle="Unlock exclusive collections, personalized styling, and early access to drops."
+      title="The ORNAQ Membership"
+      subtitle="Join an exclusive circle of saree enthusiasts and get early access to our most precious handloom drops."
       image="/src/assets/hero-banner.png"
     >
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-stone-900">Create Account</h1>
-        <p className="mt-2 text-stone-500 text-sm">Fill in your details to get started.</p>
+      <div className="mb-10">
+        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-700">New Account</p>
+        <h1 className="mt-3 text-3xl font-black text-stone-900 sm:text-4xl">Join the Club</h1>
       </div>
 
       <form onSubmit={submit} className="space-y-4">
-        <div className="relative">
-          <User className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
-          <input
-            required
-            className="w-full rounded-2xl border border-stone-200 bg-stone-50 p-4 pl-12 transition-all focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/10"
-            placeholder="Full Name"
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-          />
+        <div className="space-y-1.5">
+          <label className="text-[10px] font-black uppercase tracking-widest text-stone-400 ml-2">Full Name</label>
+          <div className="relative">
+            <User className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-300" size={18} />
+            <input
+              required
+              className="w-full rounded-2xl bg-stone-50 px-5 py-4 pl-12 text-sm font-bold border-transparent focus:bg-white focus:border-brand-300 focus:ring-0 transition-all"
+              placeholder="Your name"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+            />
+          </div>
         </div>
         
-        <div className="relative">
-          <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
-          <input
-            required
-            className="w-full rounded-2xl border border-stone-200 bg-stone-50 p-4 pl-12 transition-all focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/10"
-            type="email"
-            placeholder="Email Address"
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-          />
+        <div className="space-y-1.5">
+          <label className="text-[10px] font-black uppercase tracking-widest text-stone-400 ml-2">Email Address</label>
+          <div className="relative">
+            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-300" size={18} />
+            <input
+              required
+              className="w-full rounded-2xl bg-stone-50 px-5 py-4 pl-12 text-sm font-bold border-transparent focus:bg-white focus:border-brand-300 focus:ring-0 transition-all"
+              type="email"
+              placeholder="name@luxury.com"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+            />
+          </div>
         </div>
 
-        <div className="relative">
-          <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
-          <input
-            required
-            className="w-full rounded-2xl border border-stone-200 bg-stone-50 p-4 pl-12 transition-all focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/10"
-            placeholder="Mobile Number"
-            value={form.phone}
-            onChange={(e) => setForm({ ...form, phone: e.target.value })}
-          />
+        <div className="space-y-1.5">
+          <label className="text-[10px] font-black uppercase tracking-widest text-stone-400 ml-2">Mobile Number</label>
+          <div className="relative">
+            <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-300" size={18} />
+            <input
+              required
+              className="w-full rounded-2xl bg-stone-50 px-5 py-4 pl-12 text-sm font-bold border-transparent focus:bg-white focus:border-brand-300 focus:ring-0 transition-all"
+              placeholder="+91 98765 43210"
+              value={form.phone}
+              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+            />
+          </div>
         </div>
 
-        <div className="relative">
-          <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
-          <input
-            required
-            className="w-full rounded-2xl border border-stone-200 bg-stone-50 p-4 pl-12 transition-all focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/10"
-            type="password"
-            placeholder="Create Password (min 6 chars)"
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-          />
+        <div className="space-y-1.5">
+          <label className="text-[10px] font-black uppercase tracking-widest text-stone-400 ml-2">Secure Password</label>
+          <div className="relative">
+            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-300" size={18} />
+            <input
+              required
+              className="w-full rounded-2xl bg-stone-50 px-5 py-4 pl-12 text-sm font-bold border-transparent focus:bg-white focus:border-brand-300 focus:ring-0 transition-all"
+              type="password"
+              placeholder="Min. 6 characters"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+            />
+          </div>
         </div>
 
-        {error && <p className="text-sm text-red-500">{error}</p>}
+        {error && <p className="text-xs font-bold text-red-500 ml-2">{error}</p>}
 
         <button
           disabled={loading}
-          className="group relative flex w-full items-center justify-center gap-2 rounded-2xl bg-stone-900 p-4 font-bold text-white transition-all hover:bg-stone-800 disabled:opacity-70"
+          className="btn-primary w-full py-4 shadow-xl shadow-stone-200/50 mt-4"
         >
-          {loading ? "Creating account..." : "Join ORNAQ"}
-          {!loading && <ArrowRight className="transition-transform group-hover:translate-x-1" size={18} />}
+          {loading ? "Creating..." : "Become a Member"}
         </button>
       </form>
 
-      <p className="mt-8 text-center text-sm text-stone-500">
-        Already have an account?{" "}
-        <Link to="/login" className="font-bold text-brand-700 hover:underline">
-          Sign in instead
+      <p className="mt-8 text-center text-xs font-medium text-stone-500">
+        Already a member?{" "}
+        <Link to="/login" className="font-black text-brand-700 hover:text-brand-800 underline underline-offset-4 uppercase tracking-widest ml-1">
+          Sign In
         </Link>
       </p>
 
-      <p className="mt-6 text-center text-[10px] uppercase tracking-widest text-stone-400">
-        By joining, you agree to our Terms and Privacy Policy.
+      <p className="mt-10 text-center text-[10px] font-bold uppercase tracking-[0.2em] text-stone-300 leading-relaxed">
+        By joining, you agree to our <br />
+        <Link to="/terms" className="hover:text-stone-400 underline">Terms</Link> & <Link to="/privacy" className="hover:text-stone-400 underline">Privacy Policy</Link>
       </p>
     </AuthLayout>
   );
